@@ -1,12 +1,9 @@
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     // alert('LOADED BREH');
-    // const endPoint = 'https://localhost:3000/api/v1/habits';
-    // fetch(endPoint)
-    //     .then(response => response.json())
-    //     .then(responseInJson => console.log(responseInJson))
+    const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
+    fetch(endPoint)
+        .then(response => response.json())
+        .then(responseInJson => console.log(responseInJson))
 
 
     // let titanic = new Titanic({
