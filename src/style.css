@@ -86,3 +86,8 @@ body {
     color: white;
     transform: rotateY(180deg);
   }
+
+  .btn-edit-habit {
+    margin-top: 30%;
+    padding-top: 400px;
+  }
