@@ -194,10 +194,36 @@
                   </nav>
 
                   <div class="container-fluid lightSpeedIn">
-
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                      <h1 class="h3 mb-0 text-gray-800">H A B I T A T K.</h1>
+                    <!-- Page Heading -->
+                    <div class="row"> 
+                      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">H A B I T A T K.</h1>
+                      <div class="pl-4">
+                        <button class="btn-success btn-new-habit">New Habit.</button>
+                      </div>
                     </div>
+                  </div>
+                    <div class="row">
+                      <div class="col-xl-3 mb-4">
+                        <div id=" long-card card-span" class="card shadow h-100 py-4 form-new-habit">
+                          <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                  <div class="col mr-2">
+                                    <form>
+                                        <div class="form-group">
+                                          <div class="h5 mb-0 font-weight-bold text-gray-800">N E W   H A B I T ?</div>
+                                          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="What habit would youn like to keep track of?">
+                                        </div>
+                                        <input type="button" class="btn-success btn-post-new-habit" value="POST YER HABIT">
+                                    </form> 
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- </div>   -->
                     <!-- <div class="titanic titanic-checkbox"></div> -->
 
                     <div class="row" id="habit-row">
@@ -303,12 +329,12 @@
           
             <script src="https://cdn.rawgit.com/icons8/titanic/master/dist/js/titanic.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.5.9/bodymovin.min.js"></script>
-                <script>
+                <!-- <script>
                     var titanic = new Titanic({
                       hover: false, // auto animated on hover (default true)
                       click: true  // auto animated on click/tap (default false)
                     });
-                </script>
+                </script> -->
             
                 <!--Clicking turns this icon on-->
                 <!-- <button onclick="titanic.on(getElementById('checkbox').value)">On</button> -->

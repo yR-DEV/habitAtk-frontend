@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // alert('LOADED BREH');
     const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
     const habitDivRow = document.getElementById("habit-row");
+    const newHabitForm = document.querySelector(".form-new-habit");
+    newHabitForm.style.display = "none";
+
+    const newHabitBtn = document.querySelector(".btn-new-habit");  
+    const newHabitBtnPost = document.querySelector(".btn-post-new-habit")
+    
+    var titanic = new Titanic({
+        hover: false, // auto animated on hover (default true)
+        click: true  // auto animated on click/tap (default false)
+      });
 
     fetch(endPoint)
         .then(response => response.json())
@@ -15,48 +25,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const appendHabitDiv = (largeHabitDiv) => {
         console.log(largeHabitDiv);
-        let newTestDiv = document.createElement("div");
-        habitDivRow.appendChild(newTestDiv);
-        newTestDiv.innerHTML = largeHabitDiv;  
+        let newHabitDiv = document.createElement("div");
+        newHabitDiv.classList.add("col-xl-3");
+        newHabitDiv.classList.add("mb-4");
+        habitDivRow.appendChild(newHabitDiv);
+        newHabitDiv.innerHTML = largeHabitDiv;  
     };
 
     const createHabitDiv = (habit) => {
         let habitDiv = `
-            <div class="col-xl-3 mb-4"> 
                 <div id="card-span" class="card shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="titanic titanic-checkbox"></div>
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1"> 
-                                    ${habit.name}
+                                    NEVER YOU'RE NOT MY REAL DAD
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">NEVER YOURE NOT MY REAL DAD</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${habit.name}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         `;
         appendHabitDiv(habitDiv);
     };
     // <!--Clicking turns this icon on-->
     // <button onclick="titanic.on(getElementById('checkbox').value)">On</button>
+
+    newHabitBtn.addEventListener('click', (event) => {
+        newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
+        // newHabitForm.style.visibility = (content.dataset.toggled ^= 1) ? "visible" : "hidden";
+        // newHabitForm.classList.toggle("show");
+        // content.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
+    });
+
+    newHabitBtnPost.addEventListener('click', (event) => {
+        // console.log('we in here');
+        newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
+                
+    })
 });
-
-
-/* <div class="row">
-    <div class="col-xl-3 mb-4">
-        <div id="card-span" class="card shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class='titanic titanic-checkbox'></div>
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">MAKE YOUR DAMN BED</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">NEVER YOURE NOT MY REAL DAD</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> */
