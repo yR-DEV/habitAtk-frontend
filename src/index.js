@@ -1,17 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     // alert('LOADED BREH');
-    // const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
-    const endPoint = 'http://localhost:3000/api/v1/habits';
+    const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
+    // const endPoint = 'http://localhost:3000/api/v1/habits';
     const habitDivRow = document.getElementById("habit-row");
     const newHabitForm = document.querySelector(".form-new-habit");
 
     newHabitForm.style.display = "none";
     const habitRowsContainerDiv = document.querySelector(".habits-container");
+    const newHabitInput = document.querySelector("#input-habit-name");
 
     const newHabitBtn = document.querySelector(".btn-new-habit");  
     const newHabitBtnPost = document.querySelector(".btn-post-new-habit");
     const habitBtnEvent = document.querySelector('#habit-row');
-    // console.log(habitBtnEvent);
+    const habitBtnUpdate = document.querySelector('.btn-update-new-habit');
+    habitBtnUpdate.style.display = "none";
     
     const destroyHabitBtn = document.querySelector(".btn-destroy-habit");
 
@@ -58,45 +60,50 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">${habit.name}</div>
                                 <div class="row">
-                                    <input id="${habit.id}" type="button" class="btn btn-warning btn-edit-habit" value="EDIT" />
+                                    <input id="${habit.id}" name="${habit.name} type="button" class="btn btn-warning btn-edit-habit" value="EDIT" />
                                     <br>
                                     <br>
-                                    <input id="${habit.id} type="button" class="btn btn-danger btn-destroy-habit" value="DUH-STROY" />
+                                    <input id="${habit.id}" name="${habit.name} type="button" class="btn btn-danger btn-destroy-habit" value="DUH-STROY" />
                                 </div>    
                             </div>
                         </div>
                     </div>
                 </div>
         `;
-            appendHabitDiv(habitDiv);
-            const editHabitBtn = document.querySelector(".btn-edit-habit");
-            // createEditEventListeners(editHabitBtn, habit)
+        appendHabitDiv(habitDiv);
     };
 
+    // const fetchSomething = (id, method, body) => {
+
+    // }
 
     newHabitBtn.addEventListener('click', (event) => {
         newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
+        document.querySelector("#input-habit-name").value = "";
     });
 
     newHabitBtnPost.addEventListener('click', (event) => {
         newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
         let newHabitName = document.querySelector("#input-habit-name").value;
         console.log(newHabitName);
-        let postBody = {
-            name: newHabitName,
-            user_id: 1
-        }
-        fetch(endPoint, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(postBody)
-        }).then(response => {
-            console.log(response);
-            main();
-        });
+        if(newHabitName.value !== "") {
+            let postBody = {
+                name: newHabitName,
+                user_id: 1
+            }
+            fetch(endPoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(postBody)
+            }).then(response => {
+                console.log(response);
+                main();
+            });
+            newHabitName.value = "";
+        }     
     });
 
     const destroyHabit = (habitId) => {
@@ -106,13 +113,80 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(res => main());
     };
 
+    const editHabit = (habitName, habitId) => {
+        let editHabitId = habitName.pop();
+        let editHabitName = habitName.join(" ");
+        newHabitInput.value = editHabitName;
+        let patchBody = {
+            name: newHabitInput.value,
+            user_id: 1
+        }
+        // newHabitInput.value = habitName
+        habitBtnUpdate.style.display = "block";
+        habitBtnUpdate.name = habitId
+        newHabitBtnPost.style.display = "none";
+        console.log(habitBtnUpdate);
+        
+        // habitId = habitName[(habitName.length - 1)];
+        // habitName.pop();
+        // habitName.join(", ");
+        // console.log(habitName);
+        
+        // fetch(endPoint, {
+        //     method: "PATCH",
+            // headers: {
+            //     "Content-Type": "application/json",
+            //     "Accept": "application/json"
+            // },
+        //     body: JSON.stringify(patchBody)
+        // }).then(response => console.log(response))
+    }
+
     habitBtnEvent.addEventListener('click', (event) => {
-        // console.log(event.target);
+        // console.log(event.target.name);
         if (event.target.value === "EDIT") {
-            // console.log(event.target.id);
-            //function to go to edit and grab the id from the event here
+            newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
+            let habitEditName = (event.target.name).split(' ');
+            habitEditName.pop();
+            habitEditName.push(event.target.id)
+            theHabitId = event.target.id;
+            // console.log(habitEditName);
+            editHabit(habitEditName, theHabitId)
+            // habitNameToPopulateForm.pop();
+            // habitNameToPopulateForm.join(" ")
+            // console.log(habitNameToPopulateForm);
+            
+            // habitNameToPopulateForm.pop();
+            // habitNameToPopulateForm.join(", ")
+            // habitNameToPopulateForm.push(event.target.id)
+            // newHabitInput.value = event.target.name
+            // editHabit(habitNameToPopulateForm);
         } else if (event.target.value === "DUH-STROY") {
             destroyHabit((event.target.id).split(' ')[0]);
         }
+    });
+
+    habitBtnUpdate.addEventListener('click', (event) => {
+        newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
+        let habitEditId = habitBtnUpdate.name;
+        // console.log(habitEditId);
+        habitBtnUpdate.style.display = "none";
+        newHabitBtnPost.style.display = "block";
+        let newHabitName = document.querySelector("#input-habit-name").value;
+        let patchBody = {
+            name: newHabitName,
+            user_id: 1
+        }        
+        fetch(`${endPoint}/${habitEditId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(patchBody)
+        }).then(response => console.log(response))
+        .then(res => {
+            main();
+        })
     })
 });
