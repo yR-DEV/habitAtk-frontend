@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // alert('LOADED BREH');
     const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
     // const endPoint = 'http://localhost:3000/api/v1/habits';
     const habitDivRow = document.getElementById("habit-row");
@@ -19,15 +18,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const main = () => {
         clearHabitDivs();
-        fetch(endPoint)
-        .then(response => response.json())
-        .then(res => splitHabits(res))
+        let requestBody = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }
+        performFetch(endPoint, requestBody, "GET");
+    };
 
-        const splitHabits = (habitArray) => {
-            habitArray.forEach(habit => {
-                createHabitDiv(habit);
-            });
-        };
+    const splitHabits = (habitArray) => {
+        habitArray.forEach(habit => {
+            createHabitDiv(habit);
+        });
+    };
+
+    const performFetch = (apiEndPoint, requestObject, requestMethod) => {
+        fetch(endPoint, requestObject)
+            .then(response => response.json()) 
+            .then(res => {
+                if (requestMethod === "GET") {
+                    splitHabits(res);    
+                }
+            });    
     };
 
     const clearHabitDivs = () => {
@@ -35,11 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
             habitDivRow.removeChild(habitDivRow.firstChild);
         };
     };
-        
-    main();
 
     const appendHabitDiv = (largeHabitDiv) => {
-        // console.log(largeHabitDiv);
         let newHabitDiv = document.createElement("div");
         newHabitDiv.classList.add("col-xl-3");
         newHabitDiv.classList.add("mb-4");
@@ -73,10 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         appendHabitDiv(habitDiv);
     };
 
-    // const fetchSomething = (id, method, body) => {
-
-    // }
-
     newHabitBtn.addEventListener('click', (event) => {
         newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
         document.querySelector("#input-habit-name").value = "";
@@ -84,83 +91,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     newHabitBtnPost.addEventListener('click', (event) => {
         newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
-        let newHabitName = document.querySelector("#input-habit-name").value;
-        console.log(newHabitName);
-        if(newHabitName.value !== "") {
+        if(document.querySelector("#input-habit-name").value !== "") {
             let postBody = {
-                name: newHabitName,
+                name: document.querySelector("#input-habit-name").value,
                 user_id: 1
             }
-            fetch(endPoint, {
+            let requestObject = {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify(postBody)
-            }).then(response => {
-                console.log(response);
-                main();
-            });
-            newHabitName.value = "";
+            };
+            performFetch(endPoint, requestObject, "POST");
+            document.querySelector("#input-habit-name").value = "";
+            main();
         }     
     });
 
     const destroyHabit = (habitId) => {
-        console.log(habitId);
         fetch(`${endPoint}/${habitId}`, { method: "DELETE" })
-            .then(response => console.log(response))
-            .then(res => main());
+            .then(response => main());
     };
 
     const editHabit = (habitName, habitId) => {
         let editHabitId = habitName.pop();
         let editHabitName = habitName.join(" ");
         newHabitInput.value = editHabitName;
-        let patchBody = {
-            name: newHabitInput.value,
-            user_id: 1
-        }
-        // newHabitInput.value = habitName
+        // let patchBody = {
+        //     name: newHabitInput.value,
+        //     user_id: 1
+        // }
         habitBtnUpdate.style.display = "block";
         habitBtnUpdate.name = habitId
         newHabitBtnPost.style.display = "none";
-        console.log(habitBtnUpdate);
-        
-        // habitId = habitName[(habitName.length - 1)];
-        // habitName.pop();
-        // habitName.join(", ");
-        // console.log(habitName);
-        
-        // fetch(endPoint, {
-        //     method: "PATCH",
-            // headers: {
-            //     "Content-Type": "application/json",
-            //     "Accept": "application/json"
-            // },
-        //     body: JSON.stringify(patchBody)
-        // }).then(response => console.log(response))
     }
 
     habitBtnEvent.addEventListener('click', (event) => {
-        // console.log(event.target.name);
         if (event.target.value === "EDIT") {
             newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
             let habitEditName = (event.target.name).split(' ');
             habitEditName.pop();
             habitEditName.push(event.target.id)
             theHabitId = event.target.id;
-            // console.log(habitEditName);
             editHabit(habitEditName, theHabitId)
-            // habitNameToPopulateForm.pop();
-            // habitNameToPopulateForm.join(" ")
-            // console.log(habitNameToPopulateForm);
-            
-            // habitNameToPopulateForm.pop();
-            // habitNameToPopulateForm.join(", ")
-            // habitNameToPopulateForm.push(event.target.id)
-            // newHabitInput.value = event.target.name
-            // editHabit(habitNameToPopulateForm);
         } else if (event.target.value === "DUH-STROY") {
             destroyHabit((event.target.id).split(' ')[0]);
         }
@@ -169,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
     habitBtnUpdate.addEventListener('click', (event) => {
         newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
         let habitEditId = habitBtnUpdate.name;
-        // console.log(habitEditId);
         habitBtnUpdate.style.display = "none";
         newHabitBtnPost.style.display = "block";
         let newHabitName = document.querySelector("#input-habit-name").value;
@@ -189,4 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             main();
         })
     })
+
+
+    main();
 });
