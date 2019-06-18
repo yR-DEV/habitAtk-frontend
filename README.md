@@ -1,4 +1,4 @@
-# habitAtk-frontend
+# habitATK frontend
 ### BACKEND LINK: https://github.com/yR-DEV/habitAtk-backend
 
 ![habitAtk](https://i.imgur.com/YKnKkF0.png)
@@ -11,7 +11,7 @@
 - [Bootstrap 4.3.1](https://getbootstrap.com/)
 - [Ruby 2.6.3](https://www.ruby-lang.org/en/)
 - [Rails 5.2.3](https://rubyonrails.org/)
-- [Lite-server 2.5.3](https://www.npmjs.com/package/lite-server)
+- [Lite-server 2.5.3 `npm install lite-server`](https://www.npmjs.com/package/lite-server)
 
 
 ## SETUP/Local Environment
