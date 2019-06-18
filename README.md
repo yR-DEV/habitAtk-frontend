@@ -6,7 +6,7 @@
 ## What is it?
 - Simple habit tracker via todo list that allows a user to CRUD 'habits' that are updated real time. 
 
-##Technologies?
+## Technologies?
 - Vanilla Javascript
 - [Bootstrap 4.3.1](https://getbootstrap.com/)
 - [Ruby 2.6.3](https://www.ruby-lang.org/en/)
