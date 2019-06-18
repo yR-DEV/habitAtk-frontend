@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
-    // const endPoint = 'http://localhost:3000/api/v1/habits';
+    // const endPoint = 'https://calm-anchorage-88997.herokuapp.com/api/v1/habits';
+    const endPoint = 'http://localhost:3000/api/v1/habits';
     const habitDivRow = document.getElementById("habit-row");
     const newHabitForm = document.querySelector(".form-new-habit");
 
@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     habitBtnUpdate.style.display = "none";
     
     const destroyHabitBtn = document.querySelector(".btn-destroy-habit");
+
+    const clearHabitDivs = () => {
+        while (habitDivRow.firstChild) {
+            habitDivRow.removeChild(habitDivRow.firstChild);
+        };
+    };
 
     const main = () => {
         clearHabitDivs();
@@ -41,45 +47,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (requestMethod === "GET") {
                     splitHabits(res);    
                 }
-            });    
-    };
-
-    const clearHabitDivs = () => {
-        while (habitDivRow.firstChild) {
-            habitDivRow.removeChild(habitDivRow.firstChild);
-        };
-    };
+            })
+            .then(something => main);    
+    }
 
     const appendHabitDiv = (largeHabitDiv) => {
         let newHabitDiv = document.createElement("div");
         newHabitDiv.classList.add("col-xl-3");
         newHabitDiv.classList.add("mb-4");
         habitDivRow.appendChild(newHabitDiv);
-        newHabitDiv.innerHTML = largeHabitDiv;  
+        newHabitDiv.innerHTML = largeHabitDiv;
+        // main();  
     };
 
     // need to add 3 columns to this row, left one for button, middle for name, right one for edit/destroy buttons
     const createHabitDiv = (habit) => {
         let habitDiv = `
+            <div class="col>
+                <div class="titanic titanic-checkbox"></div>
+            </div>
+            <div class="col">
                 <div id="card-span" class="card shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col-sm mr-2">
-                                <div class="titanic titanic-checkbox"></div>
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1"> 
-                                    ${habit.id}  NEVER YOU'RE NOT MY REAL DAD
+                                    ${habit.id}  YUH YUH YUH
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">${habit.name}</div>
                                 <div class="row">
-                                    <input id="${habit.id}" name="${habit.name} type="button" class="btn btn-warning btn-edit-habit" value="EDIT" />
-                                    <br>
-                                    <br>
-                                    <input id="${habit.id}" name="${habit.name} type="button" class="btn btn-danger btn-destroy-habit" value="DUH-STROY" />
+                                    <div class="container p-2">
+                                        <input type="button" class="btn btn-info btn-block" value="COMPLETED TODAY?">
+                                    </div>
+                                    <div class="container p-2">
+                                        <input id="${habit.id}" name="${habit.name}" type="button" class="btn btn-warning btn-block btn-edit-habit" value="EDIT" />
+                                    </div>
+                                    <div class="container p-2">
+                                        <input id="${habit.id}" name="${habit.name}" type="button" class="btn btn-danger btn-block btn-destroy-habit" value="DUH-STROY" />
+                                    </div>
                                 </div>    
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>    
+                <script>
+                    var titanic = new Titanic({
+                      hover: false, // auto animated on hover (default true)
+                      click: true  // auto animated on click/tap (default false)
+                    });
+                </script>
         `;
         appendHabitDiv(habitDiv);
     };
@@ -104,10 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(postBody)
             };
-            performFetch(endPoint, requestObject, "POST");
+            // performFetch(endPoint, requestObject, "POST")
             document.querySelector("#input-habit-name").value = "";
-            main();
-        }     
+            fetch(endPoint, requestObject)
+                .then(response => response.json())
+                .then(res => console.log(res))
+                .then(something => main());
+        }    
     });
 
     const destroyHabit = (habitId) => {
@@ -119,10 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let editHabitId = habitName.pop();
         let editHabitName = habitName.join(" ");
         newHabitInput.value = editHabitName;
-        // let patchBody = {
-        //     name: newHabitInput.value,
-        //     user_id: 1
-        // }
         habitBtnUpdate.style.display = "block";
         habitBtnUpdate.name = habitId
         newHabitBtnPost.style.display = "none";
@@ -132,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.value === "EDIT") {
             newHabitForm.style.display = (content.dataset.toggled ^= 1) ? "block" : "none";
             let habitEditName = (event.target.name).split(' ');
-            habitEditName.pop();
+            // habitEditName.pop();
             habitEditName.push(event.target.id)
             theHabitId = event.target.id;
             editHabit(habitEditName, theHabitId)

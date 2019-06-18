@@ -88,6 +88,5 @@ body {
   }
 
   .btn-edit-habit {
-    margin-top: 30%;
-    padding-top: 400px;
+    width: 100%;
   }
